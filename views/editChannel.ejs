@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('head') -%>
+        <title>Edit Channel</title>
+</head>
+
+<body>
+    <%- include('header') %>
+    <div class="container">
+        <section class="account-settings">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="content-settings">
+                            <h2 class="block-title">You are about to edit</h2>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div id="pills-profile" class="tab-pane animated fadeInRight show active">
+                                    <!-- Start Form -->
+                                    <form id="profile-settings-form" action="" method="post">
+                                        <div class="error-container"></div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <div class="settings-avatar">
+                                                        <img class="w-75" src="<%= channel.logo %>" class="img-fluid d-block mx-auto mb-3" alt="<%= channel.name %>">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                            <div class="col-md-10">
+                                                <h2><%= channel.name %></h2>
+                                                <p>Catergory - <%= channel.category %></p>
+                                            </div>
+                                            <!-- Col End -->
+                                        </div>
+                                        <!-- Row End -->
+                                        
+                                        <h5 class="mb-3 mt-3 pb-3 section-border">Channel Information</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Channel Name</label>
+                                                    <input class="form-control form-control-name" name="channel_name" id="username" type="text" placeholder="Enter your Username" value="<%= channel.name %>">
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>M3u8 Address</label>
+                                                    <input type="text" class="form-control" name="stream" placeholder="Enter your email" value="<%= channel.stream %>">
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                        </div>
+                                        <!-- Row End -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Unique Name</label>
+                                                    <input class="form-control form-control-name" name="unique-name" id="first-name" type="text" placeholder="Enter Channel Unique Name" value="<%= channel.uniqe_name %>">
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Logo</label>
+                                                    <input class="form-control form-control-name" name="logo" id="last-name" type="text" placeholder="Logo url" value="<%= channel.logo %>">
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Category</label>
+                                                    <input class="form-control form-control-name" name="category" id="last-name" type="text" placeholder="Logo url" value="<%= channel.category %>">
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                        </div>
+                                        <!-- Row End -->
+                                        
+                                        <div class="form-group d-flex align-items-center mt-3">
+                                            <input type="submit" class="hvr-sweep-to-right btn btn-primary" value="Save">
+                                        </div>
+                                    </form>
+                                    <!-- Form End -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Content Settings End -->
+                    </div>
+                    <!-- Col End -->
+                </div>
+                <!-- Row End -->
+            </div>
+            <!-- Container End -->
+        </section>
+    </div>
+    <%- include('footer') %>
+    <%- include('jsSection') %>
+</body>
+
+</html>

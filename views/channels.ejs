@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('head') %>
+        <title>All Channels</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="block-title mt-3">
+            Live
+        </h2>
+        <div class="main-card">
+            <div class="small-cards">
+                <% for( channel of channels) { %>
+                    <% if(channel.category==='Live' ){ %>
+                        <div class="small-card">
+                            <a href="/play/<%= channel.id %>">
+                                <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                            </a>
+                        </div>
+                        <% } %>
+                            <% } %>
+            </div>
+        </div>
+        <h2 class="block-title mt-5">
+            Sports Channels
+        </h2>
+        <br>
+        <div class="main-card">
+            <div class="small-cards">
+                <% for( channel of channels) { %>
+                    <% if(channel.category==='Sports' ){ %>
+                        <div class="small-card">
+                            <a href="/play/<%= channel.id %>">
+                                <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                            </a>
+                        </div>
+                        <% } %>
+                            <% } %>
+            </div>
+        </div>
+        <h2 class="block-title mt-5">
+            Entertainments Channels
+        </h2>
+        <br>
+        <div class="main-card">
+            <div class="small-cards">
+                <% for( channel of channels) { %>
+                    <% if(channel.category==='Entertainment' ){ %>
+                        <div class="small-card">
+                            <a href="/play/<%= channel.id %>">
+                                <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                            </a>
+                        </div>
+                        <% } %>
+                            <% } %>
+            </div>
+        </div>
+
+        <h2 class="block-title mt-5">
+            Movie Channels
+        </h2>
+        <br>
+        <div class="main-card">
+            <div class="small-cards">
+                <% for( channel of channels) { %>
+                    <% if(channel.category==='Movie' ){ %>
+                        <div class="small-card">
+                            <a href="/play/<%= channel.id %>">
+                                <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                            </a>
+                        </div>
+                        <% } %>
+                            <% } %>
+            </div>
+        </div>
+            
+
+</body>
+
+</html>

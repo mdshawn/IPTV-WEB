@@ -1,0 +1,22 @@
+<div class="card-holder">
+    <div class="card-wrapper">
+        <div class="main-card">
+            <!-- Small Cards -->
+            <div class="small-cards">
+                <!-- Repeat these small cards (up to 30 per card) -->
+                 <% for( channel of channels) { %>
+                    <div class="small-card">
+                        <a href="/play/<%= channel.id %>">
+                            <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                        </a>
+                    </div>
+                 <% } %>
+                
+                <!-- Add more small cards as needed -->
+            </div>
+        </div>
+    </div>
+    <!-- Navigation buttons -->
+    <button class="slide-left hidden">&larr;</button>
+    <button class="slide-right">&rarr;</button>
+</div>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <%- include('head') -%>
+        <title><%= stream.name %></title>
+    </head>
+
+    <body>
+        <%- include('header') -%>
+            <!-- JW Player Container -->
+
+            <div class="d-flex justify-content-center p-3">
+                <div class="player">
+                <div id="myPlayer"></div>
+                </div>
+            </div>
+            <div class="container">
+                <h2>
+                    <img class="clogo" src="<%= stream.logo %>" alt="<%= stream.name %>">
+                    <%= stream.name %>
+                </h2>
+                <br>
+                <br>
+                <%- include('channels.ejs', { channels: channels }) %>
+            </div>
+            
+
+
+            <script>
+                if ("<%= stream.stream %>" == "") {
+                    
+                }
+                jwplayer("myPlayer").setup({
+                    file: "<%= stream.stream %>",
+                    width: "100%",
+                    aspectratio: "16:9",
+                    autostart: false,
+                    playbackRateControls: [0.5, 1, 1.5, 2],
+                    tracks: [
+                        {
+                            file: "https://path-to-subtitles.vtt",
+                            label: "English",
+                            kind: "captions",
+                            default: true
+                        }
+                    ],
+                    visualplaylist: true,
+                    qualityLabels: {
+                        240: 'Low',
+                        360: 'Medium',
+                        720: 'HD',
+                        1080: 'Full HD'
+                    }
+                });
+            </script>
+
+
+
+                <%- include('footer') %>
+                    <%- include('jsSection') %>
+    </body>
+
+</html>

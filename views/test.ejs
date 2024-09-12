@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('head') -%>
+        <title>Test Channel</title>
+        <style>
+            /* Initially hide the player */
+            .hidden {
+                display: none;
+            }
+        </style>
+</head>
+
+<body>
+    <%- include('header') -%>
+        <div class="container">
+            <h2 class="block-title">Channel Tester</h2>
+
+        </div>
+
+        <!-- JW Player Container -->
+        <div class="d-flex justify-content-center p-3">
+            <div class="player">
+                <div id="myPlayer" class="hidden"></div> <!-- Hidden initially -->
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action="">
+                        <div class="form-group d-flex"> <!-- Use flexbox to align elements horizontally -->
+                            <input type="text" class="form-control me-2" name="stream" placeholder="Enter the m3u8 link"
+                                id="streamInput">
+                            <button type="button" class="btn btn-primary mt-5" onclick="loadStream()">Play</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function loadStream() {
+                // Get the m3u8 link from the input field
+                var streamUrl = document.getElementById('streamInput').value;
+
+                if (streamUrl) {
+                    // Show the player if it was hidden
+                    document.getElementById('myPlayer').classList.remove('hidden');
+
+                    // Set up JW Player with the new stream URL
+                    jwplayer("myPlayer").setup({
+                        file: streamUrl,  // Load the stream URL dynamically
+                        width: "100%",
+                        aspectratio: "16:9",
+                        autostart: true, // Autostart the stream
+                        playbackRateControls: [0.5, 1, 1.5, 2],
+                        tracks: [
+                            {
+                                file: "https://path-to-subtitles.vtt",
+                                label: "English",
+                                kind: "captions",
+                                default: true
+                            }
+                        ],
+                        visualplaylist: true,
+                        qualityLabels: {
+                            240: 'Low',
+                            360: 'Medium',
+                            720: 'HD',
+                            1080: 'Full HD'
+                        }
+                    });
+                } else {
+                    alert("Please enter a valid m3u8 link.");
+                }
+            }
+        </script>
+
+        <%- include('footer') %>
+            <%- include('jsSection') %>
+</body>
+
+</html>
