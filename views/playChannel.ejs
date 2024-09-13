@@ -28,14 +28,22 @@
 
 
             <script>
-                if ("<%= stream.stream %>" == "") {
-                    
+                const streamUrl = new URL("<%= stream.stream %>");  
+                const domain = streamUrl.hostname;  
+                const pathUrl = new URL(streamUrl).pathname;
+                console.log(domain);
+                let stream;
+                if (domain === "livess.jagobd.com.bd") {
+                    stream = "/stream/"+pathUrl;
+                }
+                else {
+                    stream = "<%= stream.stream %>";
                 }
                 jwplayer("myPlayer").setup({
-                    file: "<%= stream.stream %>",
+                    file: ""+stream,
                     width: "100%",
                     aspectratio: "16:9",
-                    autostart: false,
+                    autostart: true,
                     playbackRateControls: [0.5, 1, 1.5, 2],
                     tracks: [
                         {

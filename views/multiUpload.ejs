@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('head') -%>
+    <title>Add Channels via M3U</title>
+</head>
+
+<body>
+    <%- include('header') %>
+    <div class="container">
+        <section class="account-settings">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="content-settings">
+                            <h2 class="block-title">Upload M3U File to Add Channels</h2>
+                            <p>Please upload a valid .m3u file containing the channel information.</p>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div id="pills-profile" class="tab-pane animated fadeInRight show active">
+                                    <!-- Start Form -->
+                                    <form id="profile-settings-form" action="/dashboard/channels/multiupload" method="post" enctype="multipart/form-data">
+                                        <div class="error-container"></div>
+                                        <h5 class="mb-3 mt-3 pb-3 section-border">Channel Information File</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="m3u">M3U Playlist File (.m3u)</label>
+                                                    <input class="form-control"
+                                                           name="m3u_file" 
+                                                           id="m3u" 
+                                                           type="file" 
+                                                           accept=".m3u" required> <!-- Restrict to .m3u -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-flex align-items-center mt-3">
+                                            <input type="submit" class="hvr-sweep-to-right btn btn-primary"
+                                                   value="Insert Channels">
+                                        </div>
+                                    </form>
+                                    <!-- Form End -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Content Settings End -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <%- include('footer') %>
+    <%- include('jsSection') %>
+</body>
+</html>

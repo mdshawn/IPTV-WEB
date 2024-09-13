@@ -58,15 +58,11 @@
 
 /* Slide Buttons */
 button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     background-color: red;
     border: none;
     color: white;
     padding: 10px 15px;
     cursor: pointer;
-    z-index: 10;
 }
 
 .slide-left {
@@ -92,4 +88,26 @@ button {
     border: 3px solid red;
     padding: 2px;
     background-color: white;
+}
+
+@media screen and (max-width: 768px) {
+    .card-holder {
+        height: 300px;
+    }
+    .main-card {
+        padding: 5px;
+    }
+    .small-card {
+        width: 80px;
+        height: 80px;
+    }
+    .player{
+        width: 100%;
+        height: 50%;
+    }
+    .clogo{
+        width: 80px;
+        height: 80px;
+    }
+    
 }
