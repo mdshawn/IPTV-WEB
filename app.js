@@ -43,6 +43,10 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use('/views', express.static(path.join(__dirname, 'views')));
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Route for rendering index page
 app.get('/', (req, res) => {
   let q = 'SELECT * FROM channels';
