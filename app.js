@@ -325,6 +325,6 @@ app.use('/stream', createProxyMiddleware({
 }));
 
 // Start the server
-app.listen(4000, () => {
-  console.log('Server is running on http://localhost:4000');
+app.listen(80, () => {
+  console.log('Server running at port 80');
 });
