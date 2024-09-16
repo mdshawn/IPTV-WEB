@@ -38,6 +38,11 @@
 
         // Detect if the stream is an MPD (DASH) or M3U8 (HLS) file
         const streamType = stream.endsWith('.mpd') ? 'dash' : 'hls';
+        let key, keyId;
+        if (streamType === 'dash') {
+            key = "<%= stream.key %>";
+            keyId = "<%=stream.keyid %>";
+        }
 
         // JW Player setup with DRM support for DASH (ClearKey)
         jwplayer("myPlayer").setup({
@@ -58,8 +63,8 @@
             // DRM configuration for ClearKey (only applies for DASH streams)
             drm: streamType === 'dash' ? {
                 clearkey: {
-                    key: "42819b85c2871aee5c5128519b057269",  // ClearKey DRM key
-                    keyId: "3f8f4a98cbbb4911b243eff1c19a0bc8"  // ClearKey DRM key ID
+                    key: `${key}`,  // ClearKey DRM key
+                    keyId: `${keyId}`  // ClearKey DRM key ID
                 }
             } : {}
         });

@@ -1,5 +1,26 @@
  <!-- Javascript Files
     ================================================== -->
+    <script>
+      // Function to get query parameters from the URL
+      function getQueryParam(param) {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get(param);
+      }
+
+      // Get the message parameter from the URL
+      const message = getQueryParam('message');
+
+      // Display the message if it exists
+      if (message) {
+          // Create a new div element for the message
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'alert alert-info'; // You can style this class in your CSS
+          messageDiv.textContent = decodeURIComponent(message);
+          
+          // Append the messageDiv to the error-container
+          document.querySelector('.error-container').appendChild(messageDiv);
+      }
+  </script>
     <!-- Initialize jQuery Library -->
     <script src="/js/jquery.js"></script>
     <!-- Popper jQuery -->

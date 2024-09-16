@@ -3,141 +3,46 @@
 
 <head>
     <%- include('head') -%>
-        <title>Manage Channels</title>
+    <title>Manage Channels</title>
 </head>
 
 <body>
     <%- include('header') %>
-        <div class="container">
-            <div class="d-flex justify-content-center">
-                <h2 class="block-title pt-3">Manage Channels</h2>
-            </div>
-            <br>
-            <div class="d-flex justify-content-center">
-                <a href="/dashboard/channels/multiupload" class="btn btn-primary mr-2">Add Channel [M3U]</a>
-                <a href="/dashboard/channels/add" class="btn btn-primary mr-2">Add Single Channel</a>
-                <a href="/dashboard/channels/test" class="btn btn-primary">Test Channel</a>
-            </div>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <h2 class="block-title pt-3">Manage Channels</h2>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+            <!-- <a href="/dashboard/channels/multiupload" class="btn btn-primary mr-2">Add Channel [M3U]</a> -->
+            <a href="/dashboard/channels/category" class="btn btn-primary mr-2">Manage Category</a>
+            <a href="/dashboard/channels/addmpd" class="btn btn-primary mr-2">Add Akash Go channel</a>
+            <a href="/dashboard/channels/add" class="btn btn-primary mr-2">Add Single Channel</a>
+            <a href="/dashboard/channels/delete" class="btn btn-primary mr-2">Delete Channels</a>
+            <a href="/dashboard/channels/test" class="btn btn-primary">Test Channel</a>
+        </div>
 
-            <h2 class="block-title mt-3">
-                Live
-            </h2>
-            <div class="main-card">
-                <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='Live' ){ %>
-                            <div class="small-card">
-                                <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                    <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                </a>
-                            </div>
-                            <% } %>
-                                <% } %>
-                </div>
-            </div>
+        <% for (let category of categories) { %>
             <h2 class="block-title mt-5">
-                Sports Channels
+                <%= category.catname %>
             </h2>
-            <br>
             <div class="main-card">
                 <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='Sports' ){ %>
+                    <% for (let channel of channels) { %>
+                        <% if (channel.category === category.catname) { %>
                             <div class="small-card">
                                 <a href="/dashboard/channels/edit/<%= channel.id %>">
                                     <img src="<%= channel.logo %>" alt="<%= channel.name %>">
                                 </a>
                             </div>
-                            <% } %>
-                                <% } %>
+                        <% } %>
+                    <% } %>
                 </div>
             </div>
-            <h2 class="block-title mt-3">
-                News
-            </h2>
-            <div class="main-card">
-                <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='News' ){ %>
-                            <div class="small-card">
-                                <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                    <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                </a>
-                            </div>
-                            <% } %>
-                                <% } %>
-                </div>
-            </div>
-            <h2 class="block-title mt-5">
-                Entertainments Channels
-            </h2>
-            <br>
-            <div class="main-card">
-                <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='Entertainment' ){ %>
-                            <div class="small-card">
-                                <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                    <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                </a>
-                            </div>
-                            <% } %>
-                                <% } %>
-                </div>
-            </div>
-            <h2 class="block-title mt-5">
-                Kids Channels
-            </h2>
-            <br>
-            <div class="main-card">
-                <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='Kids' ){ %>
-                            <div class="small-card">
-                                <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                    <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                </a>
-                            </div>
-                            <% } %>
-                                <% } %>
-                </div>
-            </div>
-            <h2 class="block-title mt-5">
-                Movie Channels
-            </h2>
-            <br>
-            <div class="main-card">
-                <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='Movies' ){ %>
-                            <div class="small-card">
-                                <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                    <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                </a>
-                            </div>
-                            <% } %>
-                                <% } %>
-                </div>
-            </div>
-            <h2 class="block-title mt-5">
-                Religious Channels
-            </h2>
-            <br>
-            <div class="main-card">
-                <div class="small-cards">
-                    <% for( channel of channels) { %>
-                        <% if(channel.category==='Religious' ){ %>
-                            <div class="small-card">
-                                <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                    <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                </a>
-                            </div>
-                            <% } %>
-                                <% } %>
-                </div>
-            </div>     </div>
-            <%- include('footer') %>
-                <%- include('jsSection') %>
+        <% } %>
+    </div>
+    <%- include('footer') %>
+    <%- include('jsSection') %>
 </body>
 
 </html>

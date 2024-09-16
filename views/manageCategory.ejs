@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('head') -%>
+    <title>Manage Channel Category</title>
+</head>
+
+<body>
+    <%- include('header') %>
+    <div class="container">
+        <section class="account-settings">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="content-settings">
+                            <h2 class="block-title">Add New Category</h2>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div id="pills-profile" class="tab-pane animated fadeInRight show active">
+                                    <!-- Start Form -->
+                                    <form id="profile-settings-form" action="/dashboard/channels/category" method="post">
+                                        <div class="error-container"></div>
+                                        <h5 class="mb-3 mt-3 pb-3 section-border">Category Information</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Category Name</label>
+                                                    <input class="form-control form-control-name" name="category" type="text" placeholder="Enter Category Name">
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                        </div>
+                                        <!-- Row End -->
+                                        
+                                        <div class="form-group d-flex align-items-center mt-3">
+                                            <input type="submit" class="hvr-sweep-to-right btn btn-primary" value="Add Category">
+                                        </div>
+                                    </form>
+                                    <!-- Form End -->
+                                </div>
+                            </div>
+
+                            <h2 class="block-title">All Categories</h2>
+                            <table class="table text-light">
+                                <tr>
+                                    <th>Category Name</th>
+                                    <th>Action</th>
+                                </tr>
+                                <% for( category of categories) { %>
+                                <tr>
+                                    <td><%= category.catname %></td>
+                                    <td>
+                                        <a href="/dashboard/channels/category/delete/<%= category.id %>">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            </table>
+                        </div>
+                        <!-- Content Settings End -->
+                    </div>
+                    <!-- Col End -->
+                </div>
+                <!-- Row End -->
+            </div>
+            <!-- Container End -->
+        </section>
+    </div>
+    <%- include('footer') %>
+    <%- include('jsSection') %>
+
+</body>
+
+</html>

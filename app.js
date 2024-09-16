@@ -9,6 +9,7 @@ const fs = require('fs');
 const readline = require('readline');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const e = require('express');
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -158,16 +159,67 @@ app.get('/dashboard', (req, res) => {
   res.render('dashboard');
 });
 
+app.get('/dashboard/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/login');
+});
+
+app.get('/dashboard/channels/category', (req, res) => {
+  let q = 'SELECT * From category';
+  db.query(q, (err, categories) => {
+    if (err) {
+      throw err;
+    }
+    console.log(categories);
+    res.render('manageCategory', { categories });
+  });
+});
+
+app.post('/dashboard/channels/category', (req, res) => {
+  let { category } = req.body;
+  let data = [category];
+  let q = 'INSERT INTO category (catname) VALUES (?)';
+  db.query(q, data, (err) => {
+    if (err) {
+      console.error(err);
+      res.redirect('/dashboard/channels/category?message=Error%20inserting%20category');
+    } else {
+      res.redirect('/dashboard/channels/category?message=Category%20inserted%20successfully');
+    }
+  });
+});
+
+app.get('/dashboard/channels/category/delete/:id', (req, res) => {
+  let id = req.params.id;
+  let q = 'DELETE FROM category WHERE id = ?';
+  db.query(q, [id], (err) => {
+    if (err) {
+      res.redirect('/dashboard/channels/category?message=Error%20deleting%20category');
+    }
+    else {
+      res.redirect('/dashboard/channels/category?message=Category%20deleted%20successfully');
+    }
+  });
+});
+
+
 app.get('/dashboard/channels', (req, res) => {
   let q = 'SELECT * FROM channels';
+  let q2 = 'SELECT * FROM category';
   db.query(q, (err, channels) => {
     if (err) {
       throw err;
     }
-    console.log(channels);
-    res.render('manageChannels', { channels });
+    db.query(q2, (err, categories) => {
+      if (err) {
+        throw err;
+      }
+    res.render('manageChannels', { channels , categories });
   });
 });
+});
+
+
 app.get('/dashboard/channels/test', (req, res) => {
   res.render('test');
 });
@@ -177,16 +229,48 @@ app.get('/dashboard/channels/add', (req, res) => {
 });
 
 app.post('/dashboard/channels/add', (req, res) => {
-  let { channel_name, stream, logo, category, unique_name } = req.body;
-  let data = [ channel_name, stream, logo, category, unique_name ];
-  let q = 'INSERT INTO channels (name, stream, logo, category, uniqe_name) VALUES (?, ?, ?, ?, ?)';
+  let { channel_name, stream, logo, category } = req.body;
+  let data = [channel_name, stream, logo, category];
+  let q = 'INSERT INTO channels (name, stream, logo, category) VALUES (?, ?, ?, ?)';
   db.query(q, data, (err) => {
     if (err) {
-      throw err;
+      res.redirect('/dashboard/channels/add?message=Error%20inserting%20channel');
+    }
+    else {
+      res.redirect('/dashboard/channels/add?message=Channel%20inserted%20successfully');
+    }
+  });
+});
+
+app.get('/dashboard/channels/addmpd', (req, res) => {
+  res.render('addmpd');
+});
+
+const base64ToHex = (base64String) => {
+  const decoded = Buffer.from(base64String, 'base64');
+  return decoded.toString('hex');
+};
+
+app.post('/dashboard/channels/addmpd', (req, res) => {
+  let { channel_name, stream, k, kid, logo, category, type } = req.body;
+
+  // Convert Base64 to hex for ClearKey DRM key and keyid
+  const k_hex = base64ToHex(k);
+  const kid_hex = base64ToHex(kid);
+
+  // Prepare data for insertion
+  let data = [channel_name, stream, k_hex, kid_hex, k, kid, logo, category, type];
+  let q = `INSERT INTO channels (name, stream, \`key\`, keyid, k, kid, logo, category, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  // Insert into the database
+  db.query(q, data, (err) => {
+    if (err) {
+      return res.status(500).send('Database error: ' + err.message);
     }
     res.redirect('/dashboard/channels/');
   });
 });
+
 
 app.get('/dashboard/channels/multiupload', (req, res) => {
   res.render('multiUpload');
@@ -214,7 +298,7 @@ function parseM3U(filePath) {
     });
 
     let currentChannel = {};
-    
+
     rl.on('line', (line) => {
       // Extract data from lines that contain channel information
       if (line.startsWith('#EXTINF')) {
@@ -222,7 +306,7 @@ function parseM3U(filePath) {
         const tvgLogoMatch = /tvg-logo="([^"]+)"/.exec(line);
         const tvgUnMatch = /tvg-unique_name="([^"]+)"/.exec(line);
         const groupTitleMatch = /group-title="([^"]+)"/.exec(line);
-        
+
         currentChannel.name = tvgNameMatch ? tvgNameMatch[1] : '';
         currentChannel.logo = tvgLogoMatch ? tvgLogoMatch[1] : '';
         currentChannel.unique_name = tvgUnMatch ? tvgUnMatch[1] : '';
@@ -246,8 +330,8 @@ app.post('/dashboard/channels/multiupload', upload.single('m3u_file'), (req, res
   parseM3U(filePath)
     .then((channels) => {
       // Insert each channel into the database if it doesn't already exist
-      const query = 'INSERT INTO channels (name, stream, logo, category, uniqe_name) VALUES (?, ?, ?, ?, ?)';
-      const checkQuery = 'SELECT COUNT(*) AS count FROM channels WHERE uniqe_name = ?';
+      const query = 'INSERT INTO channels (name, stream, logo, category,) VALUES (?, ?, ?, ?)';
+      const checkQuery = 'SELECT COUNT(*) AS count FROM channels WHERE name = ?';
 
       channels.forEach((channel) => {
         db.query(checkQuery, [channel.unique_name], (err, results) => {
@@ -277,6 +361,18 @@ app.post('/dashboard/channels/multiupload', upload.single('m3u_file'), (req, res
     });
 });
 
+app.get('/dashboard/channels/delete', (req, res) => {
+  let q = 'SELECT * FROM channels';
+  db.query(q, (err, channels) => {
+    if (err) {
+      throw err;
+    }
+    console.log(channels);
+    res.render('deleteChannel', { channels });
+  });
+});
+
+
 app.get('/dashboard/channels/delete/:id', (req, res) => {
   let id = req.params.id;
   let q = 'DELETE FROM channels WHERE id = ?';
@@ -301,9 +397,9 @@ app.get('/dashboard/channels/edit/:id', (req, res) => {
 
 app.post('/dashboard/channels/edit/:id', (req, res) => {
   let id = req.params.id;
-  let { channel_name, stream, logo, category, unique_name } = req.body;
-  let data = [ channel_name, stream, logo, category, unique_name, id ];
-  let q = 'UPDATE channels SET name = ?, stream = ?, logo = ?, category = ?, uniqe_name = ? WHERE id = ?';
+  let { channel_name, stream, logo, category } = req.body;
+  let data = [channel_name, stream, logo, category, id];
+  let q = 'UPDATE channels SET name = ?, stream = ?, logo = ?, category = ? WHERE id = ?';
   db.query(q, data, (err) => {
     if (err) {
       throw err;
@@ -314,14 +410,14 @@ app.post('/dashboard/channels/edit/:id', (req, res) => {
 
 // Proxy setup for handling CORS
 app.use('/stream', createProxyMiddleware({
-    target: 'https://livess.jagobd.com.bd',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/stream': '', // Remove "/stream" from the URL
-    },
-    onProxyReq: (proxyReq, req, res) => {
-        proxyReq.setHeader('Origin', ''); // Remove origin header to prevent CORS issues
-    }
+  target: 'https://livess.jagobd.com.bd',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/stream': '', // Remove "/stream" from the URL
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    proxyReq.setHeader('Origin', ''); // Remove origin header to prevent CORS issues
+  }
 }));
 
 // Start the server

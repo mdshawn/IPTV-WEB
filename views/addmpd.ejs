@@ -3,7 +3,7 @@
 
 <head>
     <%- include('head') -%>
-        <title>Edit Channel</title>
+        <title>Add Akash GO Channel</title>
 </head>
 
 <body>
@@ -14,56 +14,39 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="content-settings">
-                            <h2 class="block-title">You are about to edit</h2>
+                            <h2 class="block-title">You can add Akash Go MPD-</h2>
                             <div class="tab-content" id="pills-tabContent">
                                 <div id="pills-profile" class="tab-pane animated fadeInRight show active">
                                     <!-- Start Form -->
                                     <form id="profile-settings-form" action="" method="post">
                                         <div class="error-container"></div>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <div class="settings-avatar">
-                                                        <img class="w-75" src="<%= channel.logo %>" class="img-fluid d-block mx-auto mb-3" alt="<%= channel.name %>">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Col End -->
-                                            <div class="col-md-10">
-                                                <h2><%= channel.name %></h2>
-                                                <p>Catergory - <%= channel.category %></p>
-                                            </div>
-                                            <!-- Col End -->
-                                        </div>
-                                        <!-- Row End -->
-                                        
                                         <h5 class="mb-3 mt-3 pb-3 section-border">Channel Information</h5>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Channel Name</label>
-                                                    <input class="form-control form-control-name" name="channel_name" id="username" type="text" placeholder="Enter your Username" value="<%= channel.name %>">
+                                                    <input class="form-control form-control-name" name="channel_name" id="username" type="text" placeholder="Enter Channel Name">
                                                 </div>
                                             </div>
                                             <!-- Col End -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Stream Address</label>
-                                                    <input type="text" class="form-control" name="stream" placeholder="Enter m3u8 or mpd address" value="<%= channel.stream %>">
+                                                    <label>Mpd Address</label>
+                                                    <input type="text" class="form-control" name="stream" placeholder="Mpd Channel Stream">
                                                 </div>
                                             </div>
                                             <!-- Col End -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>k value</label>
-                                                    <input type="text" class="form-control" name="k" placeholder="Enter 'K' Value" value="<%= channel.k %>">
+                                                    <input type="text" class="form-control" name="k" placeholder="Enter 'K' Value">
                                                 </div>
                                             </div>
                                             <!-- Col End -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>kid value</label>
-                                                    <input type="text" class="form-control" name="kid" placeholder="Enter 'KId' Value" value="<%= channel.kid %>">
+                                                    <input type="text" class="form-control" name="kid" placeholder="Enter 'KId' Value">
                                                 </div>
                                             </div>
                                             <!-- Col End -->
@@ -74,14 +57,31 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Logo</label>
-                                                    <input class="form-control form-control-name" name="logo" id="last-name" type="text" placeholder="Logo url" value="<%= channel.logo %>">
+                                                    <input class="form-control form-control-name" name="logo" id="last-name" type="text" placeholder="Channel logo url">
                                                 </div>
                                             </div>
                                             <!-- Col End -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Category</label>
-                                                    <input class="form-control form-control-name" name="category" id="last-name" type="text" placeholder="Logo url" value="<%= channel.category %>">
+                                                    <select class="form-control form-control-name" name="category" id="category">
+                                                        <option value=""></option>
+                                                        <option value="Live">Live</option>
+                                                        <option value="News">News</option>
+                                                        <option value="Sports">Sports</option>
+                                                        <option value="Entertainment">Entertainment</option>
+                                                        <option value="Music">Music</option>
+                                                        <option value="Kids">Kids</option>
+                                                        <option value="Movie">Movie</option>
+                                                        <option value="Documentory">DOCUMENTORY</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- Col End -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Type</label>
+                                                    <input type="text" class="form-control" name="type" placeholder="Enter the stream type" value="mpd">
                                                 </div>
                                             </div>
                                             <!-- Col End -->
@@ -89,7 +89,7 @@
                                         <!-- Row End -->
                                         
                                         <div class="form-group d-flex align-items-center mt-3">
-                                            <input type="submit" class="hvr-sweep-to-right btn btn-primary" value="Save">
+                                            <input type="submit" class="hvr-sweep-to-right btn btn-primary" value="Add Channel">
                                         </div>
                                     </form>
                                     <!-- Form End -->
