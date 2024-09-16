@@ -3,94 +3,92 @@
 
 <head>
     <%- include('head') -%>
-        <title>Test Channel</title>
-        <style>
-            /* Initially hide the player */
-            .hidden {
-                display: none;
-            }
-        </style>
+    <title>Test Channel</title>
+    <style>
+        /* Initially hide the player */
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <%- include('header') -%>
-        <div class="container">
-            <h2 class="block-title">Channel Tester</h2>
+    <div class="container">
+        <h2 class="block-title">Channel Tester</h2>
+    </div>
 
+    <!-- JW Player Container -->
+    <div class="d-flex justify-content-center p-3">
+        <div class="player">
+            <div id="myPlayer" class="hidden"></div> <!-- Hidden initially -->
         </div>
+    </div>
 
-        <!-- JW Player Container -->
-        <div class="d-flex justify-content-center p-3">
-            <div class="player">
-                <div id="myPlayer" class="hidden"></div> <!-- Hidden initially -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form action="">
+                    <div class="form-group"> <!-- Use flexbox to align elements horizontally -->
+                        <input type="text" class="form-control me-2" name="stream" placeholder="Enter the m3u8 or mpd link" id="streamInput">
+                        <button type="button" class="btn btn-primary mt-2" onclick="loadStream()">Play</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <form action="">
-                        <div class="form-group"> <!-- Use flexbox to align elements horizontally -->
-                            <input type="text" class="form-control me-2" name="stream" placeholder="Enter the m3u8 link"
-                                id="streamInput">
-                            <button type="button" class="btn btn-primary mt-2" onclick="loadStream()">Play</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <script>
+        function loadStream() {
+            // Get the stream URL from the input field
+            var streamUrl = document.getElementById('streamInput').value;
 
-        <script>
-            function loadStream() {
-                // Get the m3u8 link from the input field
-                var streamUrl = document.getElementById('streamInput').value;
+            if (streamUrl) {
                 let mediaUrl = new URL(streamUrl);
                 let domain = mediaUrl.hostname;
-                let pathUrl = new URL(streamUrl).pathname;
-
-                if (domain=== "livess.jagobd.com.bd") {
-                    streamUrl = "/stream/"+pathUrl;
-                    
-                }else {
-                    streamUrl = streamUrl;
-                }
+                let pathUrl = mediaUrl.pathname;
+                let streamType = streamUrl.endsWith('.mpd') ? 'dash' : 'hls';
                 
-
-                if (streamUrl) {
-                    // Show the player if it was hidden
-                    document.getElementById('myPlayer').classList.remove('hidden');
-
-                    // Set up JW Player with the new stream URL
-                    jwplayer("myPlayer").setup({
-                        file: streamUrl,  // Load the stream URL dynamically
-                        width: "100%",
-                        aspectratio: "16:9",
-                        autostart: true, // Autostart the stream
-                        playbackRateControls: [0.5, 1, 1.5, 2],
-                        tracks: [
-                            {
-                                file: "https://path-to-subtitles.vtt",
-                                label: "English",
-                                kind: "captions",
-                                default: true
-                            }
-                        ],
-                        visualplaylist: true,
-                        qualityLabels: {
-                            240: 'Low',
-                            360: 'Medium',
-                            720: 'HD',
-                            1080: 'Full HD'
-                        }
-                    });
-                } else {
-                    alert("Please enter a valid m3u8 link.");
+                // Adjust the stream URL if needed
+                if (domain === "livess.jagobd.com.bd") {
+                    streamUrl = "/stream/" + pathUrl;
                 }
-            }
-        </script>
 
-        <%- include('footer') %>
-            <%- include('jsSection') %>
+                // Show the player if it was hidden
+                document.getElementById('myPlayer').classList.remove('hidden');
+
+                // Set up JW Player with the new stream URL
+                jwplayer("myPlayer").setup({
+                    file: streamUrl,  // Load the stream URL dynamically
+                    type: streamType, // Set the type based on the file extension
+                    width: "100%",
+                    aspectratio: "16:9",
+                    autostart: true, // Autostart the stream
+                    mute: false,
+                    playbackRateControls: [0.5, 1, 1.5, 2],
+                    visualplaylist: true,
+                    qualityLabels: {
+                        240: 'Low',
+                        360: 'Medium',
+                        720: 'HD',
+                        1080: 'Full HD'
+                    },
+                    // DRM configuration for ClearKey (only applies for DASH streams)
+                    drm: streamType === 'dash' ? {
+                        clearkey: {
+                            key: "42819b85c2871aee5c5128519b057269",  // ClearKey DRM key
+                            keyId: "3f8f4a98cbbb4911b243eff1c19a0bc8"  // ClearKey DRM key ID
+                        }
+                    } : {}
+                });
+            } else {
+                alert("Please enter a valid stream link.");
+            }
+        }
+    </script>
+
+    <%- include('footer') %>
+    <%- include('jsSection') %>
 </body>
 
 </html>
