@@ -50,7 +50,7 @@ app.get('/health', (req, res) => {
 
 // Route for rendering index page
 app.get('/', (req, res) => {
-  let q = 'SELECT * FROM channels';
+  let q = 'SELECT * FROM channels order by `order`';
   let q2 = 'SELECT * FROM category';
   db.query(q, (err, channels) => {
     if (err) {
@@ -213,7 +213,7 @@ app.get('/dashboard/channels/category/delete/:id', (req, res) => {
 
 
 app.get('/dashboard/channels', (req, res) => {
-  let q = 'SELECT * FROM channels';
+  let q = 'SELECT * FROM channels order by `order`';
   let q2 = 'SELECT * FROM category';
   db.query(q, (err, channels) => {
     if (err) {
@@ -413,20 +413,22 @@ app.get('/dashboard/channels/edit/:id', (req, res) => {
 
 app.post('/dashboard/channels/edit/:id', (req, res) => {
   let id = req.params.id;
-  let { channel_name, stream, k, kid, logo, category, type } = req.body;
+  let { channel_name, stream, k, kid, logo, category, type, order } = req.body;
 
   // Convert Base64 to hex for ClearKey DRM key and keyid
   const k_hex = base64ToHex(k);
   const kid_hex = base64ToHex(kid);
 
   // Prepare data for insertion
-  let data = [channel_name, stream, k_hex, kid_hex, k, kid, logo, category, type, id];
-  let q = `UPDATE channels SET name = ?, stream = ?, \`key\` = ?, keyid = ?, k = ?, kid = ?, logo = ?, category = ?, type = ? WHERE id = ?`;
+  let data = [channel_name, stream, k_hex, kid_hex, k, kid, logo, category, type, order, id];
+  let q = `UPDATE channels SET name = ?, stream = ?, \`key\` = ?, keyid = ?, k = ?, kid = ?, logo = ?, category = ?, type = ?, \`order\` = ? WHERE id = ?`;
   db.query(q, data, (err) => {
     if (err) {
-      throw err;
+      res.redirect('/dashboard/channels/edit/' + id + "?message=Error%20updating%20channel");
+    }else{
+      res.redirect('/dashboard/channels/edit/' + id + "?message=Channel%20updated%20successfully");
     }
-    res.redirect('/dashboard/channels/edit/' + id);
+    
   });
 });
 

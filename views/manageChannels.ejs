@@ -41,8 +41,12 @@
                 <% for (let channel of channels) { %>
                 <% if (channel.category === category.catname) { %>
                 <div class="small-card">
+                    
                     <a href="/dashboard/channels/edit/<%= channel.id %>">
                         <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                        <p>
+                            <%= channel.order %>
+                        </p>
                     </a>
                     <div class="d-flex mt-3">
                         <button class="btn btn-danger rounded-pill px-3" onclick="confirmDelete('<%= channel.id %>')">
