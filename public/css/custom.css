@@ -109,5 +109,8 @@ button {
         width: 80px;
         height: 80px;
     }
-    
+    .channel_name{
+        font-size: 1.5rem;
+        margin: 26px 0px 10px 16px;
+    }
 }

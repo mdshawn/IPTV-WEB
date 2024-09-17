@@ -13,10 +13,12 @@
         </div>
     </div>
     <div class="container">
-        <h2>
-            <img class="clogo" src="<%= stream.logo %>" alt="<%= stream.name %>">
+        <div class="d-flex">
+            <img class="ml-3 clogo" src="<%= stream.logo %>" alt="<%= stream.name %>">
+        <h2 class="channel_name">
             <%= stream.name %>
         </h2>
+        </div>
         <br><br>
         <%- include('channels.ejs', { channels: channels, categories: categories }) %>
     </div>
