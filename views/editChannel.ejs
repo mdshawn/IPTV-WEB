@@ -81,7 +81,12 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Category</label>
-                                                    <input class="form-control form-control-name" name="category" id="last-name" type="text" placeholder="Logo url" value="<%= channel.category %>">
+                                                    <select class="form-control form-control-name" name="category" id="category">
+                                                        <option value="<%= channel.category %>"><%= channel.category %></option>
+                                                        <% for(category of categories) {%>
+                                                        <option value="<%= category.catname %>"><%= category.catname %></option>
+                                                        <% } %>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <!-- Col End -->

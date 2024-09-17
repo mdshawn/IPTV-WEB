@@ -51,18 +51,24 @@ app.get('/health', (req, res) => {
 // Route for rendering index page
 app.get('/', (req, res) => {
   let q = 'SELECT * FROM channels';
-  db.query(q, (err, results) => {
+  let q2 = 'SELECT * FROM category';
+  db.query(q, (err, channels) => {
     if (err) {
       throw err;
     }
-    console.log(results);
-    res.render('index', { channels: results });
+    db.query(q2, (err, categories) => {
+      if (err) {
+        throw err;
+      }
+    res.render('index', { channels , categories });
   });
+});
 });
 app.get('/play/:id', (req, res) => {
   let id = req.params.id;
   let streamQuery = 'SELECT * FROM channels WHERE id = ?';
   let channelsQuery = 'SELECT * FROM channels';
+  let categoriesQuery = 'SELECT * FROM category';
 
   db.query(streamQuery, [id], (err, streamResults) => {
     if (err) {
@@ -72,9 +78,12 @@ app.get('/play/:id', (req, res) => {
       if (err) {
         throw err;
       }
-      console.log(streamResults);
-      console.log(channelsResults);
-      res.render('playChannel', { stream: streamResults[0], channels: channelsResults });
+      db.query(categoriesQuery, (err, categoriesResults) => {
+        if (err) {
+          throw err;
+        }
+        res.render('playChannel', { stream: streamResults[0], channels: channelsResults, categories: categoriesResults });
+      });
     });
   });
 });
@@ -225,7 +234,14 @@ app.get('/dashboard/channels/test', (req, res) => {
 });
 
 app.get('/dashboard/channels/add', (req, res) => {
-  res.render('addChannel');
+  let q = 'SELECT * FROM category';
+  db.query(q, (err, categories) => {
+    if (err) {
+      throw err;
+    }
+    res.render('addChannel', { categories });
+  });
+
 });
 
 app.post('/dashboard/channels/add', (req, res) => {
@@ -243,7 +259,13 @@ app.post('/dashboard/channels/add', (req, res) => {
 });
 
 app.get('/dashboard/channels/addmpd', (req, res) => {
-  res.render('addmpd');
+  let q = 'SELECT * FROM category';
+  db.query(q, (err, categories) => {
+    if (err) {
+      throw err;
+    }
+    res.render('addmpd', { categories });
+  });
 });
 
 const base64ToHex = (base64String) => {
@@ -361,18 +383,6 @@ app.post('/dashboard/channels/multiupload', upload.single('m3u_file'), (req, res
     });
 });
 
-app.get('/dashboard/channels/delete', (req, res) => {
-  let q = 'SELECT * FROM channels';
-  db.query(q, (err, channels) => {
-    if (err) {
-      throw err;
-    }
-    console.log(channels);
-    res.render('deleteChannel', { channels });
-  });
-});
-
-
 app.get('/dashboard/channels/delete/:id', (req, res) => {
   let id = req.params.id;
   let q = 'DELETE FROM channels WHERE id = ?';
@@ -387,19 +397,31 @@ app.get('/dashboard/channels/delete/:id', (req, res) => {
 app.get('/dashboard/channels/edit/:id', (req, res) => {
   let id = req.params.id;
   let q = 'SELECT * FROM channels WHERE id = ?';
+  let q2 = 'SELECT * FROM category';
   db.query(q, [id], (err, channel) => {
     if (err) {
       throw err;
     }
-    res.render('editChannel', { channel: channel[0] });
+    db.query(q2, (err, categories) => {
+      if (err) {
+        throw err;
+      }
+      res.render('editChannel', { channel: channel[0], categories });
   });
+});
 });
 
 app.post('/dashboard/channels/edit/:id', (req, res) => {
   let id = req.params.id;
-  let { channel_name, stream, logo, category } = req.body;
-  let data = [channel_name, stream, logo, category, id];
-  let q = 'UPDATE channels SET name = ?, stream = ?, logo = ?, category = ? WHERE id = ?';
+  let { channel_name, stream, k, kid, logo, category, type } = req.body;
+
+  // Convert Base64 to hex for ClearKey DRM key and keyid
+  const k_hex = base64ToHex(k);
+  const kid_hex = base64ToHex(kid);
+
+  // Prepare data for insertion
+  let data = [channel_name, stream, k_hex, kid_hex, k, kid, logo, category, type, id];
+  let q = `UPDATE channels SET name = ?, stream = ?, \`key\` = ?, keyid = ?, k = ?, kid = ?, logo = ?, category = ?, type = ? WHERE id = ?`;
   db.query(q, data, (err) => {
     if (err) {
       throw err;
