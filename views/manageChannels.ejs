@@ -3,73 +3,69 @@
 
 <head>
     <%- include('head') -%>
-        <title>Manage Channels</title>
+    <title>Manage Channels</title>
 </head>
 
 <body>
     <%- include('header') %>
-        <div class="container">
-            <div class="d-flex justify-content-center">
-                <h2 class="block-title pt-3">Manage Channels</h2>
-            </div>
-            <br>
-            <div class="d-flex justify-content-center">
-                <!-- <a href="/dashboard/channels/multiupload" class="btn btn-primary mr-2">Add Channel [M3U]</a> -->
-                <div class="row">
-                    <div class="col-sm-6">
-                        <a href="/dashboard/channels/category" class="btn btn-primary mr-2 p-3 mt-3">Manage Category</a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="/dashboard/channels/addmpd" class="btn btn-primary mr-2 p-3 mt-3">Add Akash Go channel</a>
-
-                    </div>
-                    <div class="col-md-6">
-                        <a href="/dashboard/channels/add" class="btn btn-primary mr-2 p-3 mt-3">Add Single Channel</a>
-
-                    </div>
-                    <div class="col-md-6">
-                        <a href="/dashboard/channels/test" class="btn btn-primary p-3 mt-3">Test Channel</a>
-
-                    </div>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <h2 class="block-title pt-3">Manage Channels</h2>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a href="/dashboard/channels/category" class="btn btn-primary mr-2 p-3 mt-3">Manage Category</a>
                 </div>
-
+                <div class="col-md-6">
+                    <a href="/dashboard/channels/addmpd" class="btn btn-primary mr-2 p-3 mt-3">Add Akash Go channel</a>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="/dashboard/channels/add" class="btn btn-primary mr-2 p-3 mt-3">Add Single Channel</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="/dashboard/channels/test" class="btn btn-primary p-3 mt-3">Test Channel</a>
+                </div>
+            </div>
+        </div>
 
-            <% for (let category of categories) { %>
-                <h2 class="block-title mt-5">
-                    <%= category.catname %>
-                </h2>
-                <div class="main-card">
-                    <div class="small-cards">
-                        <% for (let channel of channels) { %>
-                            <% if (channel.category===category.catname) { %>
-                                <div class="small-card">
-                                    <a href="/dashboard/channels/edit/<%= channel.id %>">
-                                        <img src="<%= channel.logo %>" alt="<%= channel.name %>">
-                                    </a>
-                                    <div class="d-flex mt-3">
-                                        <button class="btn btn-danger rounded-pill px-3"
-                                            onclick="confirmDelete('<%= channel.id %>')">
-                                            Delete
-                                        </button>
-
-                                    </div>
-                                </div>
-                                <% } %>
-                                    <% } %>
+        <% for (let category of categories) { %>
+        <h2 class="block-title mt-5">
+            <%= category.catname %>
+        </h2>
+        <div class="main-card">
+            <div class="small-cards">
+                <% for (let channel of channels) { %>
+                <% if (channel.category === category.catname) { %>
+                <div class="small-card">
+                    <a href="/dashboard/channels/edit/<%= channel.id %>">
+                        <img src="<%= channel.logo %>" alt="<%= channel.name %>">
+                    </a>
+                    <div class="d-flex mt-3">
+                        <button class="btn btn-danger rounded-pill px-3" onclick="confirmDelete('<%= channel.id %>')">
+                            Delete
+                        </button>
                     </div>
                 </div>
                 <% } %>
+                <% } %>
+            </div>
         </div>
-        <script>
-            function confirmDelete(id) {
-                if (confirm("Are you sure you want to delete this channel?")) {
-                    window.location.href = "/dashboard/channels/delete/" + id;
-                }
+        <% } %>
+
+    </div>
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this channel?")) {
+                window.location.href = "/dashboard/channels/delete/" + id;
             }
-        </script>
-        <%- include('footer') %>
-            <%- include('jsSection') %>
+        }
+    </script>
+    <%- include('footer') %>
+    <%- include('jsSection') %>
 </body>
 
 </html>
