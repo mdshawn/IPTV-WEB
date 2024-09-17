@@ -15,10 +15,24 @@
             <br>
             <div class="d-flex justify-content-center">
                 <!-- <a href="/dashboard/channels/multiupload" class="btn btn-primary mr-2">Add Channel [M3U]</a> -->
-                <a href="/dashboard/channels/category" class="btn btn-primary mr-2">Manage Category</a>
-                <a href="/dashboard/channels/addmpd" class="btn btn-primary mr-2">Add Akash Go channel</a>
-                <a href="/dashboard/channels/add" class="btn btn-primary mr-2">Add Single Channel</a>
-                <a href="/dashboard/channels/test" class="btn btn-primary">Test Channel</a>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a href="/dashboard/channels/category" class="btn btn-primary mr-2 p-3 mt-3">Manage Category</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/dashboard/channels/addmpd" class="btn btn-primary mr-2 p-3 mt-3">Add Akash Go channel</a>
+
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/dashboard/channels/add" class="btn btn-primary mr-2 p-3 mt-3">Add Single Channel</a>
+
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/dashboard/channels/test" class="btn btn-primary p-3 mt-3">Test Channel</a>
+
+                    </div>
+                </div>
+
             </div>
 
             <% for (let category of categories) { %>

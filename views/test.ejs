@@ -47,7 +47,6 @@
                 let mediaUrl = new URL(streamUrl);
                 let domain = mediaUrl.hostname;
                 let pathUrl = mediaUrl.pathname;
-                let streamType = streamUrl.endsWith('.mpd') ? 'dash' : 'hls';
                 
                 // Adjust the stream URL if needed
                 if (domain === "livess.jagobd.com.bd") {
@@ -60,7 +59,6 @@
                 // Set up JW Player with the new stream URL
                 jwplayer("myPlayer").setup({
                     file: streamUrl,  // Load the stream URL dynamically
-                    type: streamType, // Set the type based on the file extension
                     width: "100%",
                     aspectratio: "16:9",
                     autostart: true, // Autostart the stream
@@ -73,13 +71,6 @@
                         720: 'HD',
                         1080: 'Full HD'
                     },
-                    // DRM configuration for ClearKey (only applies for DASH streams)
-                    drm: streamType === 'dash' ? {
-                        clearkey: {
-                            key: "42819b85c2871aee5c5128519b057269",  // ClearKey DRM key
-                            keyId: "3f8f4a98cbbb4911b243eff1c19a0bc8"  // ClearKey DRM key ID
-                        }
-                    } : {}
                 });
             } else {
                 alert("Please enter a valid stream link.");
