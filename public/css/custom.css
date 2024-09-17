@@ -89,7 +89,10 @@ button {
     padding: 2px;
     background-color: white;
 }
-
+.channel_name{
+    font-size: 2rem;
+    margin: 26px 0px 10px 16px;
+}
 @media screen and (max-width: 768px) {
     .card-holder {
         height: 300px;

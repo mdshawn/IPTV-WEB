@@ -1,78 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('head') -%>
-    <title><%= stream.name %></title>
+        <title>
+            <%= stream.name %>
+        </title>
 </head>
+
 <body>
     <%- include('header') -%>
-    <!-- JW Player Container -->
-    <div class="d-flex justify-content-center p-3">
-        <div class="player">
-            <div id="myPlayer"></div>
+        <!-- JW Player Container -->
+        <div class="d-flex justify-content-center p-3">
+            <div class="player">
+                <div id="myPlayer"></div>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="d-flex">
-            <img class="ml-3 clogo" src="<%= stream.logo %>" alt="<%= stream.name %>">
-        <h2 class="channel_name">
-            <%= stream.name %>
-        </h2>
+        <div class="container">
+            <div class="d-flex">
+                <img class="ml-3 clogo" src="<%= stream.logo %>" alt="<%= stream.name %>">
+                <h2 class="channel_name">
+                    <%= stream.name %>
+                </h2>
+            </div>
+            <br><br>
+            <%- include('channels.ejs', { channels: channels, categories: categories }) %>
         </div>
-        <br><br>
-        <%- include('channels.ejs', { channels: channels, categories: categories }) %>
-    </div>
 
-    <script>
-        // Get the stream URL and extract the domain and path
-        const streamUrl = new URL("<%= stream.stream %>");
-        const domain = streamUrl.hostname;
-        const pathUrl = streamUrl.pathname;
-        console.log(domain);
-
-        // Dynamically assign the stream path based on domain
-        let stream;
-        if (domain === "livess.jagobd.com.bd") {
-            stream = "/stream/" + pathUrl;
-        } else {
-            stream = "<%= stream.stream %>";
-        }
-
-        // Detect if the stream is an MPD (DASH) or M3U8 (HLS) file
-        const streamType = stream.endsWith('.mpd') ? 'dash' : 'hls';
-        let key, keyId;
-        if (streamType === 'dash') {
-            key = "<%= stream.key %>";
-            keyId = "<%=stream.keyid %>";
-        }
-
-        // JW Player setup with DRM support for DASH (ClearKey)
-        jwplayer("myPlayer").setup({
-            file: stream,
-            type: streamType,  // Dynamically set the type (dash or hls)
-            width: "100%",
-            aspectratio: "16:9",
-            autostart: true,
-            mute: false,
-            playbackRateControls: [0.5, 1, 1.5, 2],
-            visualplaylist: true,
-            qualityLabels: {
-                240: 'Low',
-                360: 'Medium',
-                720: 'HD',
-                1080: 'Full HD'
-            },
-            // DRM configuration for ClearKey (only applies for DASH streams)
-            drm: streamType === 'dash' ? {
-                clearkey: {
-                    key: `${key}`,  // ClearKey DRM key
-                    keyId: `${keyId}`  // ClearKey DRM key ID
+        <script>
+            // Get the stream URL and extract the domain and path
+            const streamUrl = new URL("<%= stream.stream %>");
+            const domain = streamUrl.hostname;
+            const pathUrl = streamUrl.pathname;
+            console.log(domain);
+        
+            // Dynamically assign the stream path based on domain
+            let stream;
+            if (domain === "livess.jagobd.com.bd") {
+                stream = "/stream/" + pathUrl;
+            } else {
+                stream = "<%= stream.stream %>";
+            }
+        
+            // Detect if the stream is an MPD (DASH) or M3U8 (HLS) file
+            const streamType = stream.endsWith('.mpd') ? 'dash' : 'hls';
+            let drmConfig = {};
+        
+            // Check if streamType is 'dash' and set DRM configuration
+            if (streamType === 'dash') {
+                drmConfig = {
+                    clearkey: {
+                        key: "<%= stream.key %>",  // Replace with your ClearKey DRM key
+                        keyId: "<%= stream.keyid %>"  // Replace with your ClearKey DRM key ID
+                    }
+                };
+            }
+        
+            // JW Player setup object
+            const playerSetup = {
+                file: stream,
+                type: streamType,  // Set the type (dash or hls)
+                width: "100%",
+                aspectratio: "16:9",
+                autostart: true,
+                mute: false,
+                playbackRateControls: [0.5, 1, 1.5, 2],
+                visualplaylist: true,
+                qualityLabels: {
+                    144: '144p',
+                    240: '240p',
+                    360: '360p',
+                    480: '480p',
+                    720: '720p',
+                    1080: '1080p',
+                    1440: '1440p'
                 }
-            } : {}
-        });
-    </script>
-
-    <%- include('footer') %>
-    <%- include('jsSection') %>
+            };
+        
+            // Add DRM config to playerSetup if streamType is 'dash'
+            if (streamType === 'dash') {
+                playerSetup.drm = drmConfig;
+            }
+        
+            // Initialize JW Player
+            jwplayer("myPlayer").setup(playerSetup);
+        </script>
+        
+        <%- include('footer') %>
+            <%- include('jsSection') %>
 </body>
+
 </html>

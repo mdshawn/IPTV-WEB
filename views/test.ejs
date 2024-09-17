@@ -3,83 +3,87 @@
 
 <head>
     <%- include('head') -%>
-    <title>Test Channel</title>
-    <style>
-        /* Initially hide the player */
-        .hidden {
-            display: none;
-        }
-    </style>
+        <title>Test Channel</title>
+        <style>
+            /* Initially hide the player */
+            .hidden {
+                display: none;
+            }
+        </style>
 </head>
 
 <body>
     <%- include('header') -%>
-    <div class="container">
-        <h2 class="block-title">Channel Tester</h2>
-    </div>
-
-    <!-- JW Player Container -->
-    <div class="d-flex justify-content-center p-3">
-        <div class="player">
-            <div id="myPlayer" class="hidden"></div> <!-- Hidden initially -->
+        <div class="container">
+            <h2 class="block-title">Channel Tester</h2>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <form action="">
-                    <div class="form-group"> <!-- Use flexbox to align elements horizontally -->
-                        <input type="text" class="form-control me-2" name="stream" placeholder="Enter the m3u8 or mpd link" id="streamInput">
-                        <button type="button" class="btn btn-primary mt-2" onclick="loadStream()">Play</button>
-                    </div>
-                </form>
+        <!-- JW Player Container -->
+        <div class="d-flex justify-content-center p-3">
+            <div class="player">
+                <div id="myPlayer" class="hidden"></div> <!-- Hidden initially -->
             </div>
         </div>
-    </div>
 
-    <script>
-        function loadStream() {
-            // Get the stream URL from the input field
-            var streamUrl = document.getElementById('streamInput').value;
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action="">
+                        <div class="form-group"> <!-- Use flexbox to align elements horizontally -->
+                            <input type="text" class="form-control me-2" name="stream"
+                                placeholder="Enter the m3u8 or mpd link" id="streamInput">
+                            <button type="button" class="btn btn-primary mt-2" onclick="loadStream()">Play</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-            if (streamUrl) {
-                let mediaUrl = new URL(streamUrl);
-                let domain = mediaUrl.hostname;
-                let pathUrl = mediaUrl.pathname;
-                
-                // Adjust the stream URL if needed
-                if (domain === "livess.jagobd.com.bd") {
-                    streamUrl = "/stream/" + pathUrl;
+        <script>
+            function loadStream() {
+                // Get the stream URL from the input field
+                var streamUrl = document.getElementById('streamInput').value;
+
+                if (streamUrl) {
+                    let mediaUrl = new URL(streamUrl);
+                    let domain = mediaUrl.hostname;
+                    let pathUrl = mediaUrl.pathname;
+
+                    // Adjust the stream URL if needed
+                    if (domain === "livess.jagobd.com.bd") {
+                        streamUrl = "/stream/" + pathUrl;
+                    }
+
+                    // Show the player if it was hidden
+                    document.getElementById('myPlayer').classList.remove('hidden');
+
+                    // Set up JW Player with the new stream URL
+                    jwplayer("myPlayer").setup({
+                        file: streamUrl,  // Load the stream URL dynamically
+                        width: "100%",
+                        aspectratio: "16:9",
+                        autostart: true, // Autostart the stream
+                        mute: false,
+                        playbackRateControls: [0.5, 1, 1.5, 2],
+                        visualplaylist: true,
+                        qualityLabels: {
+                            144: '144p',
+                            240: '240p',
+                            360: '360p',
+                            480: '480p',
+                            720: '720p',
+                            1080: '1080p',
+                            1440: '1440p'
+                        },
+                    });
+                } else {
+                    alert("Please enter a valid stream link.");
                 }
-
-                // Show the player if it was hidden
-                document.getElementById('myPlayer').classList.remove('hidden');
-
-                // Set up JW Player with the new stream URL
-                jwplayer("myPlayer").setup({
-                    file: streamUrl,  // Load the stream URL dynamically
-                    width: "100%",
-                    aspectratio: "16:9",
-                    autostart: true, // Autostart the stream
-                    mute: false,
-                    playbackRateControls: [0.5, 1, 1.5, 2],
-                    visualplaylist: true,
-                    qualityLabels: {
-                        240: 'Low',
-                        360: 'Medium',
-                        720: 'HD',
-                        1080: 'Full HD'
-                    },
-                });
-            } else {
-                alert("Please enter a valid stream link.");
             }
-        }
-    </script>
+        </script>
 
-    <%- include('footer') %>
-    <%- include('jsSection') %>
+        <%- include('footer') %>
+            <%- include('jsSection') %>
 </body>
 
 </html>
